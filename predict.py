@@ -97,10 +97,10 @@ def predict_folder(dirs):
 
 # read_pdf('D:\\projects\\imageKaras\\temp\\pdf\\海油发展亚氨基二琥珀酸四钠采购通用协议应答文件商务部分.pdf')
 
-model = load_model('增值税发票识别.h5')
+model = load_model('增值税发票识别.keras')
 
 while True:
-    q = input('请输入包含发票图片(jpg,png)的文件路径或文件名：')
+    q = input('请输入目录或文件名(pdf,jpg,jpeg,png)：')
     if q != '':
         try:
             # testFile = 'd:\\temp\crhqhq1y.png'
@@ -110,7 +110,7 @@ while True:
                 continue
             if os.path.isfile(testFile):
                 file_extension = (os.path.splitext(testFile)[1]).lower()
-                if file_extension in ['.jpg','.png']:
+                if file_extension in ['.jpg','jpeg','.png']:
                     predict_y=  predict(model,testFile)
                     if predict_y == 1:
                         color_print('是增值税发票',fore='g',back='b')                
