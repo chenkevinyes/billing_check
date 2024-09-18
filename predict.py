@@ -2,10 +2,11 @@ from PIL import Image
 import cv2
 import numpy as np
 import os
-from keras.models import Sequential,load_model
 import fitz
 import shutil
 import uuid
+from keras.models import load_model
+
 IMAGE_SIZE = (256,256)
 def color_print(text: str, mode: str = '', fore: str = '', back: str = '',end="") -> None:
     dict_mode = {'d': '0', 'h': '1', 'nb': '22', 'u': '4', 'nu': '24',
@@ -60,7 +61,7 @@ def read_pdf(fileName,outfolder= './temp'):
             pix = fitz.Pixmap(doc, xref)
             # 保存图像
             if str(fitz.csRGB) == str(pix.colorspace):                
-                img_path =newFolder +'//'+str(uuid1)+'_'+ f'{page_index+1}_{xref}.png'
+                img_path =newFolder +'//'+str(uuid1)+'_'+ f'{page_index+1}_{xref}.jpg'
                 pix.save(img_path)
     # 关闭PDF文件
     doc.close()
@@ -90,7 +91,12 @@ def predict_folder(dirs):
             print('不支持的文件:'+testFile)
             # color_print( name +' 是',fore='g',back='b')                
         # else:
-        #     color_print(name + ' 不是',fore='r')                       
+        #     color_print(name + ' 不是',fore='r') 
+    
+    outFolder = dirs+'\\'+'out_'+str(len(findList))
+    os.mkdir(outFolder)   
+    for name in findList:
+        shutil.move(dirs +'\\'+name, outFolder +'\\'+name)                   
     color_print('从'+str(len(names))+'图片中，识别出'+str(len(findList))+'张发票',fore='g',back='b')
     if len(findList)>0:
         color_print(','.join(findList)) 
